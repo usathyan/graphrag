@@ -1,4 +1,4 @@
-# GraphRAG: Drug Discovery Target Identification Queries
+# Latent Knowledge Graph for Drug Discovery Target Identification
 
 ## 1. Introduction
 
