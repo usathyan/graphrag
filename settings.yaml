@@ -13,7 +13,7 @@ models:
     api_key: ${OPENROUTER_API_KEY} # Using OPENROUTER_API_KEY environment variable
     # audience: "https://cognitiveservices.azure.com/.default"
     # organization: <organization_id>
-    model: openai/gpt-4o # OpenAI model via OpenRouter
+    model: openai/gpt-4.1-nano # OpenAI model via OpenRouter
     # deployment_name: <azure_model_deployment_name>
     encoding_model: cl100k_base # Standard for OpenAI models
     model_supports_json: true # GPT-4o supports JSON mode
@@ -48,7 +48,8 @@ models:
 input:
   type: file # or blob
   file_type: text # [csv, text, json]
-  base_dir: "input"
+  base_dir: "input/articles/processed"
+  file_pattern: ".*\\.md$$"
 
 chunks:
   size: 1200
