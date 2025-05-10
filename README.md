@@ -262,6 +262,43 @@ During the indexing of the 6 scientific articles from the `input/articles/proces
 
 These numbers give an indication of the scale of the knowledge graph constructed from the input documents for these experiments. It is obvious, the corpus is quite small and should be increased. This is one of the TODOs.
 
+### 3.y. Understanding the Graph Components (Entities, Relationships, Communities)
+
+Beyond the numerical statistics, it's helpful to understand what the core components of the generated graph represent. The detailed content for these components is stored in Parquet files within the `output/<timestamp>/artefacts/` directory of the corresponding indexing run.
+
+1.  **Entities:**
+    *   **What they are:** These are the key nouns, concepts, or named items extracted from your documents (e.g., specific genes like "EGFR", diseases like "Non-Small Cell Lung Cancer", drugs, techniques). GraphRAG's LLM identifies these based on the `ENTITY_EXTRACTION_PROMPT` (in the `prompts/` directory).
+    *   **Where to find details:** The full list of extracted entities and their attributes can be found in `create_graph_entities.parquet`.
+
+2.  **Relationships:**
+    *   **What they are:** These represent the connections or interactions identified by the LLM between the extracted entities (e.g., "Alectinib" TREATS "Non-Small Cell Lung Cancer"). This process is guided by the `RELATIONSHIP_EXTRACTION_PROMPT`. Relationships typically form triplets: (Source Entity, Relationship Type, Target Entity).
+    *   **Where to find details:** The list of all identified relationships is stored in `create_graph_relationships.parquet`.
+
+3.  **Communities:**
+    *   **What they are:** GraphRAG performs community detection on the entity graph, grouping densely interconnected entities. These communities often represent higher-level themes or topics within your document set (e.g., "EGFR inhibitors research," "Computational drug discovery techniques").
+    *   **Where to find details:** The definition of which entities belong to which community is in `create_graph_communities.parquet`.
+
+4.  **Community Reports:**
+    *   **What they are:** For each detected community, GraphRAG uses an LLM (guided by the `COMMUNITY_REPORT_PROMPT`) to generate a natural language summary. This report describes the main theme of the community, its key entities, and their interconnections, offering a human-readable overview of emergent topics.
+    *   **Where to find details:** The full text of generated community reports is in `generate_community_reports.parquet`.
+
+**Inspecting Detailed Data:**
+To explore the actual content of these Parquet files, you can use Python with libraries like `pandas` and `pyarrow`. For example:
+```python
+import pandas as pd
+
+# Replace <timestamp> with the actual timestamp of your output directory
+# e.g., output_dir = 'output/20230101-120000/artefacts/'
+
+# entities_df = pd.read_parquet(f'{output_dir}create_graph_entities.parquet')
+# print(entities_df.head())
+
+# community_reports_df = pd.read_parquet(f'{output_dir}generate_community_reports.parquet')
+# for report_summary in community_reports_df['summary']:
+#     print(report_summary)
+#     print("---")
+```
+
 ### 3.3. General Challenges and Observations:
 *   **Query Specificity:** Highly specific queries, especially those asking for ranked lists ("most cited") or quantitative details not typically found in narrative text, are challenging unless the input data is specifically structured or contains explicit mentions.
 *   **Information Availability:** GraphRAG can only synthesize answers based on the information present in the indexed documents. If the information isn't there, no amount of prompt engineering or model power can create it.
