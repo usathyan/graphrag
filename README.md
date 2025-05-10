@@ -1,4 +1,4 @@
-# Latent Knowledge Graph for Drug Discovery Target Identification
+# Latent Knowledge Graph for Drug Discovery
 
 ## 1. Introduction
 
