@@ -155,4 +155,51 @@ For optimal results with your specific data, you may need to tune the prompts us
 
 ## Project Versioning
 
-This project uses GraphRAG version `2.2.1` as specified in `requirements.txt`. For information on breaking changes or versioning of the core GraphRAG library, please refer to the official GraphRAG repository and its documentation. 
+This project uses GraphRAG version `2.2.1` as specified in `requirements.txt`. For information on breaking changes or versioning of the core GraphRAG library, please refer to the official GraphRAG repository and its documentation.
+
+## Utility Scripts
+
+This project includes utility scripts located in the `utils/` directory.
+
+### PDF to Markdown Converter (`utils/pdf_to_markdown.py`)
+
+This script converts PDF files to Markdown format using the `markitdown` library. It can process a single PDF file or all PDF files within a specified directory.
+
+**Prerequisites:**
+
+Ensure `markitdown` and its dependencies for PDF processing are installed. If you followed the main setup and installed `requirements.txt`, this should already be handled. The relevant line in `requirements.txt` is:
+`markitdown[pdf,docx,pptx,xlsx]==0.1.1`
+
+**Usage:**
+
+Ensure your virtual environment is active (`source .venv/bin/activate`).
+
+*   **To convert a single PDF file:**
+    ```bash
+    python3 utils/pdf_to_markdown.py <path_to_input_pdf_file>
+    ```
+    The Markdown file will be saved in the same directory as the input PDF with a `.md` extension.
+    To specify a different output directory for the single converted file:
+    ```bash
+    python3 utils/pdf_to_markdown.py <path_to_input_pdf_file> -o <path_to_output_directory>
+    ```
+
+*   **To convert all PDF files in a directory:**
+    ```bash
+    python3 utils/pdf_to_markdown.py <path_to_input_directory> -o <path_to_output_directory>
+    ```
+    The `<path_to_output_directory>` is required when processing a directory. Markdown files will be saved in this output directory.
+
+**Example (as requested by user):**
+
+To convert all PDF files in `input/articles/` and save the Markdown output to `input/articles/processed/`:
+
+1.  Create the input directory and place some PDF files in it (if not already present):
+    ```bash
+    mkdir -p input/articles
+    # Add your PDF files to input/articles/
+    ```
+2.  Run the script:
+    ```bash
+    python3 utils/pdf_to_markdown.py input/articles -o input/articles/processed
+    ``` 
