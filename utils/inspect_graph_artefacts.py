@@ -61,19 +61,19 @@ def main():
     show_all = 'all' in args.show
 
     if show_all or 'entities' in args.show:
-        entities_file = artefacts_path / "create_graph_entities.parquet"
+        entities_file = artefacts_path / "entities.parquet"
         display_parquet_summary(entities_file, "Entities", args.head)
 
     if show_all or 'relationships' in args.show:
-        relationships_file = artefacts_path / "create_graph_relationships.parquet"
+        relationships_file = artefacts_path / "relationships.parquet"
         display_parquet_summary(relationships_file, "Relationships", args.head)
 
     if show_all or 'communities' in args.show:
-        communities_file = artefacts_path / "create_graph_communities.parquet"
+        communities_file = artefacts_path / "communities.parquet"
         display_parquet_summary(communities_file, "Communities Definition", args.head)
     
     if show_all or 'reports' in args.show:
-        reports_file = artefacts_path / "generate_community_reports.parquet"
+        reports_file = artefacts_path / "community_reports.parquet"
         display_parquet_summary(reports_file, "Community Reports", args.head)
 
 if __name__ == "__main__":
