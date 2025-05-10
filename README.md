@@ -202,4 +202,39 @@ To convert all PDF files in `input/articles/` and save the Markdown output to `i
 2.  Run the script:
     ```bash
     python3 utils/pdf_to_markdown.py input/articles -o input/articles/processed
-    ``` 
+    ```
+
+## Scientific Article Querying Experiments (Recent Example)
+
+Beyond the initial "A Christmas Carol" example, a series of experiments were conducted to test GraphRAG's capabilities on a corpus of scientific articles. This section summarizes that process and its outcomes.
+
+**1. Objective:**
+To index a collection of scientific articles (converted from PDF to Markdown) and evaluate GraphRAG's ability to answer complex, domain-specific queries using different LLMs for response synthesis.
+
+**2. Input Data:**
+*   Scientific articles were first converted from PDF to Markdown using the `utils/pdf_to_markdown.py` script.
+*   The processed Markdown files were stored in `input/articles/processed/`.
+*   GraphRAG was configured to use this directory as the `input:base_dir` with `file_pattern: ".*\\.md$$"` in `settings.yaml`.
+
+**3. Indexing:**
+The standard indexing pipeline (`graphrag index --root .`) was run to process these articles. The `default_embedding_model` used was `nomic-embed-text` served via a local Ollama instance.
+
+**4. Querying and LLM Models Tested:**
+A set of 10 scientific queries were run using the `global` search method (`graphrag query --root . --method global --query "..."`).
+The following chat/synthesis LLMs (configured as `llm:model` in `settings.yaml` via OpenRouter) were tested:
+*   `openai/gpt-4o`: Initial tests were impacted by API credit exhaustion.
+*   `openai/gpt-4.1-nano`: Showed some success but was generally less capable for complex synthesis.
+*   `openai/gpt-4o-mini`: This model yielded the most comprehensive and successful results once API credits were sufficient.
+
+**5. Key Outcomes & Observations:**
+*   **Successful Queries:** With `openai/gpt-4o-mini`, many queries related to therapeutic targets, computational methods, and knowledge graph applications in drug discovery yielded detailed and relevant answers based on the indexed articles.
+*   **Failed Queries:** Some queries, particularly those asking for highly specific data not likely present in the narrative text of the articles (e.g., "most cited targets," information on CRISPR screens for *metabolic diseases* specifically), returned an "unable to answer" response. This highlights that GraphRAG's success is contingent on the information actually being present in the source documents.
+*   **Model Impact:** The choice of LLM for the synthesis step significantly impacted the quality and detail of the answers. `gpt-4o-mini` provided a good balance.
+*   **API Credit Management:** The experiments underscored the critical importance of ensuring sufficient API credits when using third-party LLM providers like OpenRouter. Errors due to `Insufficient credits` were encountered.
+*   **Configuration:** Correctly configuring `settings.yaml` (e.g., `input:file_pattern`, LLM endpoints, and model names) is crucial for the pipeline to run successfully.
+
+**Refer to the detailed experimental report and discussion (available in the development/chat history where these experiments were conducted) for a query-by-query breakdown and further commentary.**
+
+**Reminder on Configuration:**
+*   Ensure your `OPENROUTER_API_KEY` (or other relevant keys) is set in your `.env` file.
+*   Carefully configure the `llm`, `embeddings_llm`, etc., sections in `settings.yaml` to point to your desired models and API endpoints. 
