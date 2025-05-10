@@ -233,7 +233,7 @@ The following chat/synthesis LLMs (configured as `llm:model` in `settings.yaml` 
 *   **API Credit Management:** The experiments underscored the critical importance of ensuring sufficient API credits when using third-party LLM providers like OpenRouter. Errors due to `Insufficient credits` were encountered.
 *   **Configuration:** Correctly configuring `settings.yaml` (e.g., `input:file_pattern`, LLM endpoints, and model names) is crucial for the pipeline to run successfully.
 
-**Refer to the detailed experimental report and discussion (available in the development/chat history where these experiments were conducted) for a query-by-query breakdown and further commentary.**
+**Refer to the [Detailed Experimental Report](experimental_report.md) for a query-by-query breakdown and further commentary.**
 
 **Reminder on Configuration:**
 *   Ensure your `OPENROUTER_API_KEY` (or other relevant keys) is set in your `.env` file.
