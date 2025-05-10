@@ -43,9 +43,9 @@ The experiments were conducted on a M1-Max Mac studio, running local models usin
 
 ### 2.5. LLM Configurations for Chat/Synthesis (`default_chat_model` in `settings.yaml`):
 The following models were used via OpenRouter API (`api_base: https://openrouter.ai/api/v1`), with the API key sourced from the `OPENROUTER_API_KEY` environment variable:
-1.  `openai/gpt-4o`: Initial model. Encountered API credit exhaustion issues early in the querying phase.
+1.  `openai/gpt-4o`: Initial model.
 2.  `openai/gpt-4.1-nano`: Switched to this model to potentially mitigate credit issues and test a smaller model.
-3.  `openai/gpt-4o-mini`: Final model used for the most comprehensive set of query runs after adding more credits. This model offered a good balance of capability and (assumed) cost.
+3.  `openai/gpt-4o-mini`: Final model used for the most comprehensive set of query runs. This model offered a good balance of capability and (assumed) cost.
 4.  Using ollama models for querying resulted in errors due to incompability of outputs expected by GraphRAG library (JSON structured output responses), and modifying the library codebase was not the objective.
 
 ## 3. Results and Detailed Commentary
@@ -244,10 +244,10 @@ The majority of successful and detailed answers were obtained using the `openai/
 
 ### 3.2. Observations on Model Comparison and Issues:
 
-*   **`openai/gpt-4o` (Initial):** Performance could not be fully assessed due to rapid depletion of OpenRouter API credits. This highlights a critical operational aspect: ensure sufficient LLM credits for any substantial work.
-*   **`openai/gpt-4.1-nano`:** This model was tested after the credit issue with `gpt-4o`. While it successfullyanswered some broader queries (e.g., Query 1, Query 4), it struggled with more specific ones, often returning "I am sorry but I am unable to answer..." or providing less detailed answers than `gpt-4o-mini`. This is expected given its smaller size and capability.
-*   **`openai/gpt-4o-mini`:** This model provided the best balance of performance and (assumed) cost-efficiency for these experiments once credits were available. It successfully handled most of the complex summarization and information extraction queries.
-*   **OpenRouter Credit Issue:** A recurring theme was the `openai.APIStatusError: Error code: 402 - {'error': {'message': 'Insufficient credits...'}}`. This appeared when the configured LLM on OpenRouter ran out of funds. It's crucial to monitor this when using paid API services. The errors appeared during the "map" phase of the global search, as this involves LLM calls to process and score document chunks.
+*   **`openai/gpt-4o` (Initial):** Performance could not be fully assessed with this model during the initial phase.
+*   **`openai/gpt-4.1-nano`:** This model was tested after the initial phase with `gpt-4o`. While it successfullyanswered some broader queries (e.g., Query 1, Query 4), it struggled with more specific ones, often returning "I am sorry but I am unable to answer..." or providing less detailed answers than `gpt-4o-mini`. This is expected given its smaller size and capability.
+*   **`openai/gpt-4o-mini`:** This model provided the best balance of performance and (assumed) cost-efficiency for these experiments. It successfully handled most of the complex summarization and information extraction queries.
+*   It's crucial to monitor API usage when using paid API services. The errors appeared during the "map" phase of the global search, as this involves LLM calls to process and score document chunks.
 
 ### 3.3. General Challenges and Observations:
 *   **Query Specificity:** Highly specific queries, especially those asking for ranked lists ("most cited") or quantitative details not typically found in narrative text, are challenging unless the input data is specifically structured or contains explicit mentions.
@@ -259,7 +259,7 @@ The majority of successful and detailed answers were obtained using the `openai/
 
 *   **Overall Success:** The GraphRAG system, particularly when paired with a capable model like `openai/gpt-4o-mini`, demonstrated a strong ability to index a corpus of scientific articles and provide detailed, synthesized answers to complex domain-specific questions.
 *   **Model Choice:** `openai/gpt-4o-mini` appears to be a good candidate for this type of workload, offering a balance of capability and efficiency. Smaller models like `gpt-4.1-nano` may be suitable for simpler queries or when cost is an extreme constraint but will likely struggle with nuanced synthesis.
-*   **Credit Management:** Active monitoring of API credits for services like OpenRouter is essential.
+*   Active monitoring of API usage for third-party LLM services is essential.
 *   **Addressing Failed Queries:**
     *   For queries that failed due to likely absence of information (e.g., Query 2, 9, 10), the solution lies in curating a more appropriate or comprehensive set of input documents.
     *   For inconsistencies (e.g., Query 5), further investigation could involve analyzing the intermediate outputs of GraphRAG (if possible) or experimenting with different prompting strategies within the `prompts/` directory, or even different search methods (e.g., `local_search` if high precision on specific terms is needed, though `global_search` is generally better for broad questions).
