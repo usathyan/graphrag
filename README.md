@@ -526,3 +526,26 @@ To convert all PDF files in `input/articles/` and save the Markdown output to `i
     ```bash
     python3 utils/pdf_to_markdown.py input/articles -o input/articles/processed
     ``` 
+
+#### Inspecting Graph Artefacts (`utils/inspect_graph_artefacts.py`)
+
+To get a quick look at the content of the generated Parquet files (entities, relationships, communities, community reports) from an indexing run, you can use the `inspect_graph_artefacts.py` script.
+
+**Usage:**
+
+Ensure your virtual environment is active (`source .venv/bin/activate`).
+
+```bash
+python3 utils/inspect_graph_artefacts.py <path_to_artefacts_directory> [options]
+```
+
+**Arguments:**
+*   `<path_to_artefacts_directory>`: **Required**. The path to the specific timestamped `artefacts` directory created by an indexing run (e.g., `output/20231026-103000/artefacts/`).
+
+**Options:**
+*   `--head N`: Number of rows to display from the head of each Parquet file (default is 5).
+*   `--show <type1> [<type2> ...]`: Specify which artefact types to display. Choices are `entities`, `relationships`, `communities`, `reports`. Use `all` to show all (this is the default if `--show` is not provided).
+    *   Example: `python3 utils/inspect_graph_artefacts.py output/your_timestamp/artefacts/ --show entities reports --head 3` (shows top 3 entities and reports).
+    *   Example: `python3 utils/inspect_graph_artefacts.py output/your_timestamp/artefacts/` (shows top 5 rows of all artefacts).
+
+This script will print the shape (number of rows, columns) and the first few rows of the specified Parquet files, giving you a snapshot of the extracted data. For Community Reports, it also prints the full summary of the first report found. 
