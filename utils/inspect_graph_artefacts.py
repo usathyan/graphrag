@@ -13,12 +13,16 @@ def display_parquet_summary(file_path: Path, file_description: str, head_n: int 
     try:
         df = pd.read_parquet(file_path)
         print(f"\n--- {file_description} ({file_path.name}) ---")
+        print(f"Actual Total: {len(df)}")
         print(f"Available Columns: {df.columns.tolist()}")
 
         if file_description == "Entities":
             name_cols = ['title', 'name', 'human_readable_id', 'label']
             desc_col = 'description'
+            type_col_candidate = 'type'
             actual_name_col = None
+            entity_type_col = type_col_candidate if type_col_candidate in df.columns else None
+
             for col in name_cols:
                 if col in df.columns:
                     actual_name_col = col
@@ -29,10 +33,13 @@ def display_parquet_summary(file_path: Path, file_description: str, head_n: int 
                 for i, row in df.head(head_n).iterrows():
                     title = row[actual_name_col]
                     description = row[desc_col]
+                    entity_type = row[entity_type_col] if entity_type_col else "N/A"
                     print(f"  {i+1}. Title: {title}")
+                    if entity_type_col:
+                        print(f"     Type: {entity_type}")
                     print(f"     Description: {description}")
             elif actual_name_col:
-                print(f"\nExample Entity Names/IDs (from '{actual_name_col}' column, top {head_n}, description column not found):")
+                print(f"\nExample Entity Names/IDs (from '{actual_name_col}' column, top {head_n}, description or type column not found):")
                 unique_names = df[actual_name_col].dropna().astype(str)
                 for i, name in enumerate(unique_names.head(head_n)):
                     print(f"  {i+1}. {name}")
@@ -76,11 +83,16 @@ def display_parquet_summary(file_path: Path, file_description: str, head_n: int 
                 print(df.head(head_n).to_string())
 
         elif file_description == "Community Reports" and 'summary' in df.columns:
+            report_title_col_candidate = 'title'
+            report_title_col = report_title_col_candidate if report_title_col_candidate in df.columns else None
+            
             print(f"\nTop {head_n if head_n <=2 else 2} Community Report Summaries (from 'summary' column):")
             if not df.empty:
                 for i in range(min(len(df), head_n if head_n <=2 else 2)):
                     print(f"\nReport {i+1}:")
-                    print(df['summary'].iloc[i])
+                    if report_title_col:
+                        print(f"  Title: {df[report_title_col].iloc[i]}")
+                    print(f"  Summary: {df['summary'].iloc[i]}")
             else:
                 print("No community reports found in the file.")
         
