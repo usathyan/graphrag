@@ -260,7 +260,7 @@ During the indexing of the 6 scientific articles from the `input/articles/proces
 *   **Communities Detected:** 6
 *   **Community Reports Generated:** 6
 
-These numbers give an indication of the scale of the knowledge graph constructed from the input documents for these experiments.
+These numbers give an indication of the scale of the knowledge graph constructed from the input documents for these experiments. It is obvious, the corpus is quite small and should be increased. This is one of the TODOs.
 
 ### 3.3. General Challenges and Observations:
 *   **Query Specificity:** Highly specific queries, especially those asking for ranked lists ("most cited") or quantitative details not typically found in narrative text, are challenging unless the input data is specifically structured or contains explicit mentions.
