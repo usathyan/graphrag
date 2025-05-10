@@ -1,4 +1,4 @@
-# Latent Knowledge Graph for Drug Discovery
+# Latent Knowledge Graphs for Drug Discovery
 
 ## 1. Introduction
 
@@ -248,6 +248,19 @@ The majority of successful and detailed answers were obtained using the `openai/
 *   **`openai/gpt-4.1-nano`:** This model was tested after the initial phase with `gpt-4o`. While it successfullyanswered some broader queries (e.g., Query 1, Query 4), it struggled with more specific ones, often returning "I am sorry but I am unable to answer..." or providing less detailed answers than `gpt-4o-mini`. This is expected given its smaller size and capability.It did well with summarization tasks.
 *   **`openai/gpt-4o-mini`:** This model provided the best balance of performance and (assumed) cost-efficiency for these experiments. It successfully handled most of the complex summarization and information extraction queries. This model is also rated #1 on openrouter.ai's Science leaderboard.
 *   It's crucial to monitor API usage when using paid API services. The errors appeared during the "map" phase of the global search, as this involves LLM calls to process and score document chunks.
+
+### 3.x. Indexing Statistics (from processing 6 scientific articles)
+
+During the indexing of the 6 scientific articles from the `input/articles/processed/` directory, the GraphRAG pipeline reported the following statistics:
+
+*   **Input Files Processed:** 6
+*   **Document Chunks Created:** 133
+*   **Entities Extracted:** 77
+*   **Entity Relationships Found:** 10
+*   **Communities Detected:** 6
+*   **Community Reports Generated:** 6
+
+These numbers give an indication of the scale of the knowledge graph constructed from the input documents for these experiments.
 
 ### 3.3. General Challenges and Observations:
 *   **Query Specificity:** Highly specific queries, especially those asking for ranked lists ("most cited") or quantitative details not typically found in narrative text, are challenging unless the input data is specifically structured or contains explicit mentions.
