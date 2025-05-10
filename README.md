@@ -43,14 +43,14 @@ The experiments were conducted on a M1-Max Mac studio, running local models usin
 
 ### 2.5. LLM Configurations for Chat/Synthesis (`default_chat_model` in `settings.yaml`):
 The following models were used via OpenRouter API (`api_base: https://openrouter.ai/api/v1`), with the API key sourced from the `OPENROUTER_API_KEY` environment variable:
-1.  `openai/gpt-4o`: Initial model.
-2.  `openai/gpt-4.1-nano`: Switched to this model to potentially mitigate credit issues and test a smaller model.
+1.  `openai/gpt-4o`: Initial model - most expensive of the 3 models used.
+2.  `openai/gpt-4.1-nano`: Switched to this model to test differences to quality, while being cheapest.
 3.  `openai/gpt-4o-mini`: Final model used for the most comprehensive set of query runs. This model offered a good balance of capability and (assumed) cost.
 4.  Using ollama models for querying resulted in errors due to incompability of outputs expected by GraphRAG library (JSON structured output responses), and modifying the library codebase was not the objective.
 
 ## 3. Results and Detailed Commentary
 
-The majority of successful and detailed answers were obtained using the `openai/gpt-4o-mini` model after OpenRouter credits were replenished.
+The majority of successful and detailed answers were obtained using the `openai/gpt-4o-mini` model.
 
 ### 3.1. Performance of `openai/gpt-4o-mini` (Final Model):
 
@@ -245,8 +245,8 @@ The majority of successful and detailed answers were obtained using the `openai/
 ### 3.2. Observations on Model Comparison and Issues:
 
 *   **`openai/gpt-4o` (Initial):** Performance could not be fully assessed with this model during the initial phase.
-*   **`openai/gpt-4.1-nano`:** This model was tested after the initial phase with `gpt-4o`. While it successfullyanswered some broader queries (e.g., Query 1, Query 4), it struggled with more specific ones, often returning "I am sorry but I am unable to answer..." or providing less detailed answers than `gpt-4o-mini`. This is expected given its smaller size and capability.
-*   **`openai/gpt-4o-mini`:** This model provided the best balance of performance and (assumed) cost-efficiency for these experiments. It successfully handled most of the complex summarization and information extraction queries.
+*   **`openai/gpt-4.1-nano`:** This model was tested after the initial phase with `gpt-4o`. While it successfullyanswered some broader queries (e.g., Query 1, Query 4), it struggled with more specific ones, often returning "I am sorry but I am unable to answer..." or providing less detailed answers than `gpt-4o-mini`. This is expected given its smaller size and capability.It did well with summarization tasks.
+*   **`openai/gpt-4o-mini`:** This model provided the best balance of performance and (assumed) cost-efficiency for these experiments. It successfully handled most of the complex summarization and information extraction queries. This model is also rated #1 on openrouter.ai's Science leaderboard.
 *   It's crucial to monitor API usage when using paid API services. The errors appeared during the "map" phase of the global search, as this involves LLM calls to process and score document chunks.
 
 ### 3.3. General Challenges and Observations:
@@ -271,9 +271,9 @@ The majority of successful and detailed answers were obtained using the `openai/
 This set of experiments provides valuable insights into the practical application of GraphRAG and highlights areas for attention in configuration, model selection, and expectation management.
 
 ---
-## Original Project Guide: Setup, Basic Usage, and Utilities
+## Setup, Basic Usage, and Utilities
 
-This section contains the original setup and usage instructions for this GraphRAG project example, including how to run the initial "A Christmas Carol" demonstration and use the PDF conversion utility.
+This section contains setup and usage instructions, including how to run the initial "A Christmas Carol" demonstration and use the PDF conversion utility.
 
 For more in-depth information about GraphRAG itself, please also refer to the official resources:
 
